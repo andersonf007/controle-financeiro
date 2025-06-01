@@ -2,7 +2,6 @@
 
 > An optimized application for daily expense tracking and finance management. <br />
 
-![MMAS (820 x 360 px)](https://user-images.githubusercontent.com/72301141/206877824-90492e92-2e2d-4de6-b23c-312f283bdfd6.png)
 
 
 ## Setup
@@ -42,5 +41,3 @@ https://apps.apple.com/vn/app/mmas-money-tracker/id1582638369
 </table>
 
 
-## LICENSE
-MMAS: Money Tracker is [MIT-licensed](https://github.com/floranguyen0/mmas-money-tracker/blob/main/LICENSE).
