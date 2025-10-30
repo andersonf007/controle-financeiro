@@ -36,6 +36,7 @@ class CalendarBody extends StatefulWidget {
   _CalendarBodyState createState() => _CalendarBodyState();
 }
 
+
 class _CalendarBodyState extends State<CalendarBody> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
@@ -99,6 +100,7 @@ class _CalendarBodyState extends State<CalendarBody> {
                               categoryIcon: iconData(itemList[int]),
                             ))).then((value) => setState(() {}));
               },
+              //esse widget é o que faz a ação de deslizar para deletar
               child: SwipeActionCell(
                 key: ObjectKey(transactions[int]),
                 //performsFirstActionWithFullSwipe: true,-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -128,7 +130,7 @@ class _CalendarBodyState extends State<CalendarBody> {
                               });
                       },
                       color: red),
-                  SwipeAction(
+                  /*SwipeAction(
                       title: getTranslated(context, 'Add') ?? 'Add',
                       onTap: (CompletionHandler handler) {
                         var model = transactions[int];
@@ -137,8 +139,9 @@ class _CalendarBodyState extends State<CalendarBody> {
                         setState(() {});
                         customToast(context, 'Transaction has been updated');
                       },
-                      color: Color.fromRGBO(255, 183, 121, 1)),
+                      color: Color.fromRGBO(255, 183, 121, 1)),*/
                 ],
+                //esse codigo lista todas as despesas e receitas do dia selecionado
                 child: Column(
                   children: [
                     Container(
@@ -303,6 +306,7 @@ class _CalendarBodyState extends State<CalendarBody> {
             });
           }
 
+          //esse conjunto de widgets é o que controla  o calendário, o saldo e as transações do dia selecionado
           return Column(children: [
             TableCalendar<InputModel>(
               availableCalendarFormats: {
@@ -395,7 +399,7 @@ class _CalendarBodyState extends State<CalendarBody> {
                 valueListenable: _selectedEvents,
                 builder: (context, value, _) {
                   return Column(children: [
-                    Balance(value),
+                    Balance(value), // esse widget mostra o saldo total
                     Expanded(child: buildEvents(value))
                   ]);
                 },
@@ -479,7 +483,7 @@ class _BalanceState extends State<Balance> {
       color: Colors.white54,
       height: 69.h,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 5.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

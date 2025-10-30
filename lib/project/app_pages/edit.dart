@@ -6,6 +6,7 @@ import 'package:money_assistant_2608/project/classes/input_model.dart';
 import 'package:money_assistant_2608/project/localization/methods.dart';
 import 'input.dart';
 
+//essa  classe é usada para editar uma entrada existente, ele encaminhas os dados do modelo de entrada para o widget AddEditInput, que é responsável por exibir o formulário de edição.
 class Edit extends StatelessWidget {
   static final _formKey3 = GlobalKey<FormState>(debugLabel: '_formKey3');
   final InputModel? inputModel;

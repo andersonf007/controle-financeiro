@@ -34,7 +34,7 @@ class SignIn extends StatelessWidget {
   Widget build(BuildContext context) {
     final inputBorder = BorderRadius.vertical(bottom: Radius.circular(10.0), top: Radius.circular(20.0));
     return FlutterLogin(
-      title: 'MMAS',
+      title: 'Controle Financeiro',
       //logo: 'Hi!',
       onLogin: _loginUser,
       onSignup: _signupUser,

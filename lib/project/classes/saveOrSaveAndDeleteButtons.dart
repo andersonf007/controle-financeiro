@@ -57,9 +57,9 @@ class SaveAndDeleteButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         ElevatedButton.icon(
-          onPressed: () {
+          onPressed: () async {
             if (this.saveAndDeleteInput) {
-              deleteInputFunction(context);
+              await deleteInputFunction(context);
             } else {
               deleteCategoryFunction(context: context, categoryName: this.categoryName!, parentExpenseItem: this.parentExpenseItem, contextEx: this.contextEx, contextExEdit: this.contextExEdit, contextIn: this.contextIn, contextInEdit: this.contextInEdit);
             }

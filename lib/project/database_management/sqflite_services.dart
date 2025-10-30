@@ -9,6 +9,13 @@ abstract class DB {
   static Database? _db;
   static int get _version => 1;
 
+//DB.init(): Inicializa o banco.
+//DB.inputModelList(): Retorna todos os lançamentos.
+//DB.insert(model): Adiciona um lançamento.
+//DB.update(model): Atualiza um lançamento.
+//DB.delete(id): Remove um lançamento.
+//DB.deleteAll(): Limpa todos os lançamentos.
+
   static Future<void> init() async {
     if (_db != null) {
       return;

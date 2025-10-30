@@ -41,8 +41,7 @@ class AddInput extends StatefulWidget {
 }
 
 class _AddInputState extends State<AddInput> {
-  static final _formKey1 = GlobalKey<FormState>(debugLabel: '_formKey1'),
-      _formKey2 = GlobalKey<FormState>(debugLabel: '_formKey2');
+  static final _formKey1 = GlobalKey<FormState>(debugLabel: '_formKey1'), _formKey2 = GlobalKey<FormState>(debugLabel: '_formKey2');
 
   @override
   Widget build(BuildContext context) {
@@ -57,48 +56,32 @@ class _AddInputState extends State<AddInput> {
         }
       },
       child: DefaultTabController(
-          initialIndex: 0,
-          length: 2,
-          child: Scaffold(
-              backgroundColor: blue1,
-              appBar: InExAppBar(true),
-              body:
-                  // ChangeNotifierProvider<ChangeModelType>(
-                  //     create: (context) => ChangeModelType(),
-                  //     child:
-                  PanelForKeyboard(
-                TabBarView(
-                  children: [
-                    AddEditInput(
-                      type: 'Expense',
-                      formKey: _formKey2,
-                    ),
-                    AddEditInput(
-                      type: 'Income',
-                      formKey: _formKey1,
-                    )
-                  ],
-                ),
-              ))),
+        initialIndex: 0,
+        length: 2,
+        child: Scaffold(
+          backgroundColor: blue1,
+          appBar: InExAppBar(true), // AppBar da despesas e receitas
+          body:
+          // ChangeNotifierProvider<ChangeModelType>(
+          //     create: (context) => ChangeModelType(),
+          //     child:
+          PanelForKeyboard(TabBarView(children: [AddEditInput(type: 'Expense', formKey: _formKey2), AddEditInput(type: 'Income', formKey: _formKey1)])),
+        ),
+      ),
     )
-        // )
-        ;
+    // )
+    ;
   }
 }
 
+//essa classe é responsavel por abrir o teclado personalizado quando o usuario clicar no campo de valor
 class PanelForKeyboard extends StatelessWidget {
-  const PanelForKeyboard(
-    this.body,
-  );
+  const PanelForKeyboard(this.body);
   final Widget body;
   void _insertText(String myText) {
     final text = _amountController.text;
     TextSelection textSelection = _amountController.selection;
-    String newText = text.replaceRange(
-      textSelection.start,
-      textSelection.end,
-      myText,
-    );
+    String newText = text.replaceRange(textSelection.start, textSelection.end, myText);
     if (newText.length > 13) {
       newText = newText.substring(0, 13);
     }
@@ -119,13 +102,11 @@ class PanelForKeyboard extends StatelessWidget {
       }
       _amountController.text = newText;
     } else {
-      _amountController.text =
-          format(double.parse(newText.replaceAll(',', '')));
+      _amountController.text = format(double.parse(newText.replaceAll(',', '')));
     }
 
     //define text input and cursor position
-    textSelection = TextSelection.fromPosition(
-        TextPosition(offset: _amountController.text.length));
+    textSelection = TextSelection.fromPosition(TextPosition(offset: _amountController.text.length));
     _amountController.selection = textSelection;
   }
 
@@ -141,22 +122,16 @@ class PanelForKeyboard extends StatelessWidget {
     final selectionLength = textSelection.end - textSelection.start;
     // There is a selection.
     if (selectionLength > 0) {
-      final newText = text.replaceRange(
-        textSelection.start,
-        textSelection.end,
-        '',
-      );
+      final newText = text.replaceRange(textSelection.start, textSelection.end, '');
       // if users delete all input or if input has '.'
       // => Don't need to reformat when deleting
       if (newText == '' || newText.contains('.')) {
         _amountController.text = newText;
       } else {
-        _amountController.text =
-            format(double.parse(newText.replaceAll(',', '')));
+        _amountController.text = format(double.parse(newText.replaceAll(',', '')));
       }
 
-      textSelection = TextSelection.fromPosition(
-          TextPosition(offset: _amountController.text.length));
+      textSelection = TextSelection.fromPosition(TextPosition(offset: _amountController.text.length));
       _amountController.selection = textSelection;
       return;
     }
@@ -166,19 +141,13 @@ class PanelForKeyboard extends StatelessWidget {
     final offset = _isUtf16Surrogate(previousCodeUnit) ? 2 : 1;
     final newStart = textSelection.start - offset;
     final newEnd = textSelection.start;
-    final newText = text.replaceRange(
-      newStart,
-      newEnd,
-      '',
-    );
+    final newText = text.replaceRange(newStart, newEnd, '');
     if (newText == '' || newText.contains('.')) {
       _amountController.text = newText;
     } else {
-      _amountController.text =
-          format(double.parse(newText.replaceAll(',', '')));
+      _amountController.text = format(double.parse(newText.replaceAll(',', '')));
     }
-    textSelection = TextSelection.fromPosition(
-        TextPosition(offset: _amountController.text.length));
+    textSelection = TextSelection.fromPosition(TextPosition(offset: _amountController.text.length));
     _amountController.selection = textSelection;
   }
 
@@ -189,42 +158,40 @@ class PanelForKeyboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SlidingUpPanel(
-        controller: _pc,
-        minHeight: 0,
-        maxHeight: 300.h,
-        parallaxEnabled: true,
-        isDraggable: false,
-        panelSnapping: true,
-        panel: CustomKeyboard(
-          panelController: _pc,
-          mainFocus: amountFocusNode,
-          nextFocus: descriptionFocusNode,
-          onTextInput: (myText) {
-            _insertText(myText);
-          },
-          onBackspace: () {
-            _backspace();
-          },
-          page: model.type == 'Income'
-              // Provider.of<ChangeModelType>(context).modelType == 'Income'
-              ? IncomeCategory()
-              : ExpenseCategory(),
-        ),
-        body: this.body);
+      controller: _pc,
+      minHeight: 0,
+      maxHeight: 300.h,
+      parallaxEnabled: true,
+      isDraggable: false,
+      panelSnapping: true,
+      panel: CustomKeyboard(
+        panelController: _pc,
+        mainFocus: amountFocusNode,
+        nextFocus: descriptionFocusNode,
+        onTextInput: (myText) {
+          _insertText(myText);
+        },
+        onBackspace: () {
+          _backspace();
+        },
+        page:
+            model.type == 'Income'
+                // Provider.of<ChangeModelType>(context).modelType == 'Income'
+                ? IncomeCategory()
+                : ExpenseCategory(),
+      ),
+      body: this.body,
+    );
   }
 }
 
+//essa classe é responsavel pr criar o layout de adicionar a entrada ou saida
 class AddEditInput extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final InputModel? inputModel;
   final String? type;
   final IconData? categoryIcon;
-  const AddEditInput({
-    required this.formKey,
-    this.inputModel,
-    this.type,
-    this.categoryIcon,
-  });
+  const AddEditInput({required this.formKey, this.inputModel, this.type, this.categoryIcon});
   @override
   Widget build(BuildContext context) {
     if (this.inputModel != null) {
@@ -233,45 +200,22 @@ class AddEditInput extends StatelessWidget {
       // Provider.of<ChangeModelType>(context, listen: false)
       //     .changeModelType(this.inputModel!.type!);
     } else {
-      model = InputModel(
-        type: this.type,
-      );
+      model = InputModel(type: this.type);
       defaultCategory = categoryItem(Icons.category_outlined, 'Category');
       // Provider.of<ChangeModelType>(context, listen: false)
       //     .changeModelType(this.type!);
     }
     return ChangeNotifierProvider<ChangeCategoryA>(
-        create: (context) => ChangeCategoryA(),
-        child: ListView(children: [
+      create: (context) => ChangeCategoryA(),
+      child: ListView(
+        children: [
           AmountCard(),
-          SizedBox(
-            height: 30.h,
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: white,
-                border: Border.all(
-                  color: grey,
-                  width: 0.6.w,
-                )),
-            child: Column(
-              children: [
-                CategoryCard(),
-                DescriptionCard(),
-                DateCard(),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: 70.h),
-            child: this.inputModel != null
-                ? SaveAndDeleteButton(
-                    saveAndDeleteInput: true,
-                    formKey: this.formKey,
-                  )
-                : SaveButton(true, null, true),
-          )
-        ]));
+          SizedBox(height: 30.h),
+          Container(decoration: BoxDecoration(color: white, border: Border.all(color: grey, width: 0.6.w)), child: Column(children: [CategoryCard(), DescriptionCard(), DateCard()])),
+          Padding(padding: EdgeInsets.symmetric(vertical: 70.h), child: this.inputModel != null ? SaveAndDeleteButton(saveAndDeleteInput: true, formKey: this.formKey) : SaveButton(true, null, true)),
+        ],
+      ),
+    );
   }
 }
 
@@ -280,14 +224,13 @@ class AmountCard extends StatefulWidget {
   _AmountCardState createState() => _AmountCardState();
 }
 
+//essa classe é responsavel por preencher o valor da entrada ou saida
 class _AmountCardState extends State<AmountCard> {
   @override
   void initState() {
     super.initState();
     amountFocusNode = FocusNode();
-    _amountController = TextEditingController(
-      text: model.id == null ? '' : format(model.amount!),
-    );
+    _amountController = TextEditingController(text: model.id == null ? '' : format(model.amount!));
   }
   // @override
   // void dispose(){
@@ -299,25 +242,13 @@ class _AmountCardState extends State<AmountCard> {
   Widget build(BuildContext context) {
     Color colorMain = model.type == 'Income' ? green : red;
     return Container(
-      decoration: BoxDecoration(
-          color: white,
-          border: Border(
-              bottom: BorderSide(
-            color: grey,
-            width: 0.6.h,
-          ))),
+      decoration: BoxDecoration(color: white, border: Border(bottom: BorderSide(color: grey, width: 0.6.h))),
       child: Padding(
-        padding:
-            EdgeInsets.only(top: 15.h, bottom: 30.h, right: 20.w, left: 20.w),
+        padding: EdgeInsets.only(top: 15.h, bottom: 30.h, right: 20.w, left: 20.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              '${getTranslated(context, 'Amount')}',
-              style: TextStyle(
-                fontSize: 22.sp,
-              ),
-            ),
+            Text('${getTranslated(context, 'Amount')}', style: TextStyle(fontSize: 22.sp)),
             TextFormField(
               controller: _amountController,
               readOnly: true,
@@ -331,35 +262,22 @@ class _AmountCardState extends State<AmountCard> {
               // ],
               onTap: () => _pc.open(),
               cursorColor: colorMain,
-              style: GoogleFonts.aBeeZee(
-                  color: colorMain,
-                  fontSize: 35.sp,
-                  fontWeight: FontWeight.bold),
+              style: GoogleFonts.aBeeZee(color: colorMain, fontSize: 35.sp, fontWeight: FontWeight.bold),
               focusNode: amountFocusNode,
               decoration: InputDecoration(
-                hintText: '0',
-                hintStyle: GoogleFonts.aBeeZee(
-                    color: colorMain,
-                    fontSize: 35.sp,
-                    fontWeight: FontWeight.bold),
-                icon: Padding(
-                  padding: EdgeInsets.only(right: 5.w),
-                  child: Icon(
-                    Icons.monetization_on,
-                    size: 45.sp,
-                    color: colorMain,
-                  ),
-                ),
-                suffixIcon: _amountController.text.length > 0
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.clear,
-                          size: 24.sp,
-                        ),
-                        onPressed: () {
-                          _amountController.clear();
-                        })
-                    : SizedBox(),
+                hintText: '0', //valor inicial da quantia que o usuario vai digitar
+                hintStyle: GoogleFonts.aBeeZee(color: colorMain, fontSize: 35.sp, fontWeight: FontWeight.bold),
+                icon: Padding(padding: EdgeInsets.only(right: 5.w), child: Icon(Icons.monetization_on, size: 45.sp, color: colorMain)),
+                suffixIcon:
+                    _amountController.text.length > 0
+                        ? IconButton(
+                          icon: Icon(Icons.clear, size: 24.sp),
+                          onPressed: () {
+                            print("object");
+                            _amountController.clear();
+                          },
+                        )
+                        : SizedBox(),
               ),
             ),
           ],
@@ -374,68 +292,42 @@ class CategoryCard extends StatefulWidget {
   _CategoryCardState createState() => _CategoryCardState();
 }
 
+//essa classe é responsavel por criar o layout de selecionar a categoria
 class _CategoryCardState extends State<CategoryCard> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<ChangeCategoryA>(builder: (_, changeCategoryA, __) {
-      changeCategoryA.categoryItemA ??= defaultCategory;
-      var categoryItem = changeCategoryA.categoryItemA;
-      model.category = categoryItem!.text;
-      return GestureDetector(
+    return Consumer<ChangeCategoryA>(
+      builder: (_, changeCategoryA, __) {
+        changeCategoryA.categoryItemA ??= defaultCategory;
+        var categoryItem = changeCategoryA.categoryItemA;
+        model.category = categoryItem!.text;
+        return GestureDetector(
           onTap: () async {
             if (_pc.isPanelOpen) {
               _pc.close();
             }
-            CategoryItem newCategoryItem = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => model.type == 'Income'
-                      ? IncomeCategory()
-                      : ExpenseCategory()),
-            );
+            CategoryItem newCategoryItem = await Navigator.push(context, MaterialPageRoute(builder: (context) => model.type == 'Income' ? IncomeCategory() : ExpenseCategory()));
             changeCategoryA.changeCategory(newCategoryItem);
           },
-          child: Column(children: [
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 20.w, right: 20.w, top: 20.h, bottom: 21.h),
-              child: Row(
-                children: [
-                  Icon(
-                    iconData(categoryItem),
-                    size: 40.sp,
-                    color: model.type == 'Income' ? green : red,
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 31.w),
-                      child: Text(
-                        getTranslated(context, categoryItem.text) ??
-                            categoryItem.text,
-                        style: TextStyle(
-                          fontSize: 24.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                  // Spacer(),
-                  Icon(
-                    Icons.arrow_forward_ios_outlined,
-                    size: 20.sp,
-                  ),
-                ],
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 20.h, bottom: 21.h),
+                child: Row(
+                  children: [
+                    Icon(iconData(categoryItem), size: 40.sp, color: model.type == 'Income' ? green : red),
+                    Expanded(child: Padding(padding: EdgeInsets.only(left: 31.w), child: Text(getTranslated(context, categoryItem.text) ?? categoryItem.text, style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis))),
+                    // Spacer(),
+                    Icon(Icons.arrow_forward_ios_outlined, size: 20.sp),
+                  ],
+                ),
               ),
-            ),
-            Divider(
-              height: 0,
-              thickness: 0.25.w,
-              color: grey,
-              indent: 85.w,
-            ),
-          ]));
-    });
+              Divider(height: 0, thickness: 0.25.w, color: grey, indent: 85.w),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -444,6 +336,7 @@ class DescriptionCard extends StatefulWidget {
   _DescriptionCardState createState() => _DescriptionCardState();
 }
 
+//essa classe é responsavel por criar o layout de adicionar a descricao da entrada ou saida
 class _DescriptionCardState extends State<DescriptionCard> {
   static late TextEditingController descriptionController;
 
@@ -451,8 +344,7 @@ class _DescriptionCardState extends State<DescriptionCard> {
   void initState() {
     super.initState();
     descriptionFocusNode = FocusNode();
-    descriptionController =
-        TextEditingController(text: model.description ?? '');
+    descriptionController = TextEditingController(text: model.description ?? '');
   }
 
   // @override
@@ -463,67 +355,56 @@ class _DescriptionCardState extends State<DescriptionCard> {
 
   KeyboardActionsConfig _buildConfig(BuildContext context) {
     return KeyboardActionsConfig(
-        nextFocus: false,
-        keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
-        keyboardBarColor: Colors.grey[200],
-        actions: [
-          KeyboardActionsItem(
-              focusNode: descriptionFocusNode!,
-              toolbarButtons: [
-                (node) {
-                  return SizedBox(
-                    width: 1.sw,
-                    child: Padding(
-                        padding: EdgeInsets.only(left: 5.w, right: 16.w),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context)
-                                    .requestFocus(amountFocusNode);
-                                _pc.open();
-                              },
-                              child: SizedBox(
-                                height: 35.h,
-                                width: 60.w,
-                                child: Icon(Icons.keyboard_arrow_up,
-                                    size: 25.sp, color: Colors.blueGrey),
-                              ),
-                            ),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     node.unfocus();
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) => model.type == 'Income'
-                            //                 ? IncomeCategory()
-                            //                 : ExpenseCategory()));
-                            //   },
-                            //   child: Text(
-                            //     getTranslated(context, 'Choose Category')!,
-                            //     style: TextStyle(
-                            //         fontSize: 16.sp,
-                            //         fontWeight: FontWeight.bold,
-                            //         color: Colors.blueGrey),
-                            //   ),
-                            // ),
-                            GestureDetector(
-                                onTap: () => node.unfocus(),
-                                child: Text(
-                                  getTranslated(context, "Done")!,
-                                  style: TextStyle(
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blue),
-                                ))
-                          ],
-                        )),
-                  );
-                },
-              ])
-        ]);
+      nextFocus: false,
+      keyboardActionsPlatform: KeyboardActionsPlatform.ALL,
+      keyboardBarColor: Colors.grey[200],
+      actions: [
+        KeyboardActionsItem(
+          focusNode: descriptionFocusNode!,
+          toolbarButtons: [
+            (node) {
+              return SizedBox(
+                width: 1.sw,
+                child: Padding(
+                  padding: EdgeInsets.only(left: 5.w, right: 16.w),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          FocusScope.of(context).requestFocus(amountFocusNode);
+                          _pc.open();
+                        },
+                        child: SizedBox(height: 35.h, width: 60.w, child: Icon(Icons.keyboard_arrow_up, size: 25.sp, color: Colors.blueGrey)),
+                      ),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     node.unfocus();
+                      //     Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => model.type == 'Income'
+                      //                 ? IncomeCategory()
+                      //                 : ExpenseCategory()));
+                      //   },
+                      //   child: Text(
+                      //     getTranslated(context, 'Choose Category')!,
+                      //     style: TextStyle(
+                      //         fontSize: 16.sp,
+                      //         fontWeight: FontWeight.bold,
+                      //         color: Colors.blueGrey),
+                      //   ),
+                      // ),
+                      GestureDetector(onTap: () => node.unfocus(), child: Text(getTranslated(context, "Done")!, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.blue))),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ],
+        ),
+      ],
+    );
   }
 
   @override
@@ -534,60 +415,47 @@ class _DescriptionCardState extends State<DescriptionCard> {
       tapOutsideBehavior: TapOutsideBehavior.translucentDismiss,
       autoScroll: false,
       config: _buildConfig(context),
-      child: Column(children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.5.h),
-          child: TextFormField(
-            controller: descriptionController,
-            maxLines: null,
-            minLines: 1,
-            keyboardType: TextInputType.multiline,
-            keyboardAppearance: Brightness.light,
-            // maxLength: ,
-            onTap: () {
-              if (_pc.isPanelOpen) {
-                _pc.close();
-              }
-            },
-            cursorColor: blue1,
-            textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: 20.sp),
-            focusNode: descriptionFocusNode,
-            textInputAction: TextInputAction.newline,
-            decoration: InputDecoration(
+      child: Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.5.h),
+            child: TextFormField(
+              controller: descriptionController,
+              maxLines: null,
+              minLines: 1,
+              keyboardType: TextInputType.multiline,
+              keyboardAppearance: Brightness.light,
+              // maxLength: ,
+              onTap: () {
+                if (_pc.isPanelOpen) {
+                  _pc.close();
+                }
+              },
+              cursorColor: blue1,
+              textCapitalization: TextCapitalization.sentences,
+              style: TextStyle(fontSize: 20.sp),
+              focusNode: descriptionFocusNode,
+              textInputAction: TextInputAction.newline,
+              decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: getTranslated(context, 'Description'),
-                hintStyle: GoogleFonts.cousine(
-                  fontSize: 22.sp,
-                  fontStyle: FontStyle.italic,
-                ),
-                suffixIcon: descriptionController.text.length > 0
-                    ? IconButton(
-                        icon: Icon(
-                          Icons.clear,
-                          size: 20.sp,
-                        ),
-                        onPressed: () {
-                          descriptionController.clear();
-                        })
-                    : SizedBox(),
-                icon: Padding(
-                  padding: EdgeInsets.only(right: 15.w),
-                  child: Icon(
-                    Icons.description_outlined,
-                    size: 40.sp,
-                    color: Colors.blueGrey,
-                  ),
-                )),
+                hintStyle: GoogleFonts.cousine(fontSize: 22.sp, fontStyle: FontStyle.italic),
+                suffixIcon:
+                    descriptionController.text.length > 0
+                        ? IconButton(
+                          icon: Icon(Icons.clear, size: 20.sp),
+                          onPressed: () {
+                            descriptionController.clear();
+                          },
+                        )
+                        : SizedBox(),
+                icon: Padding(padding: EdgeInsets.only(right: 15.w), child: Icon(Icons.description_outlined, size: 40.sp, color: Colors.blueGrey)),
+              ),
+            ),
           ),
-        ),
-        Divider(
-          height: 0,
-          thickness: 0.25.w,
-          color: grey,
-          indent: 85.w,
-        )
-      ]),
+          Divider(height: 0, thickness: 0.25.w, color: grey, indent: 85.w),
+        ],
+      ),
     );
   }
 }
@@ -598,6 +466,7 @@ class DateCard extends StatefulWidget {
   _DateCardState createState() => _DateCardState();
 }
 
+//essa classe é responsavel por criar o layout de selecionar a data e hora da entrada ou saida
 class _DateCardState extends State<DateCard> {
   @override
   Widget build(BuildContext context) {
@@ -606,8 +475,7 @@ class _DateCardState extends State<DateCard> {
       model.time = selectedTime.format(context);
     }
     return Padding(
-      padding:
-          EdgeInsets.only(left: 20.w, right: 20.w, top: 17.5.h, bottom: 19.h),
+      padding: EdgeInsets.only(left: 20.w, right: 20.w, top: 17.5.h, bottom: 19.h),
       child: Row(
         children: [
           GestureDetector(
@@ -615,37 +483,37 @@ class _DateCardState extends State<DateCard> {
               if (_pc.isPanelOpen) {
                 _pc.close();
               }
-showDatePicker(
-  context: context,
-  initialDate: DateFormat('dd/MM/yyyy').parse(model.date!),
-  firstDate: DateTime(1990, 1, 1),
-  lastDate: DateTime(2050, 12, 31),
-  builder: (context, child) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        colorScheme: ColorScheme.light(
-          primary: blue3, // Cor do header
-          onPrimary: Colors.black, // Texto do header
-          onSurface: Colors.black, // Texto dos dias
-        ),
-        dialogBackgroundColor: white,
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            foregroundColor: Color.fromRGBO(80, 157, 253, 1), // Botão OK/Cancelar
-          ),
-        ),
-      ),
-      child: child!,
-    );
-  },
-).then((value) {
-  if (value != null) {
-    setState(() {
-      selectedDate = value;
-      model.date = DateFormat('dd/MM/yyyy').format(value);
-    });
-  }
-});
+              showDatePicker(
+                context: context,
+                initialDate: DateFormat('dd/MM/yyyy').parse(model.date!),
+                firstDate: DateTime(1990, 1, 1),
+                lastDate: DateTime(2050, 12, 31),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.light(
+                        primary: blue3, // Cor do header
+                        onPrimary: Colors.black, // Texto do header
+                        onSurface: Colors.black, // Texto dos dias
+                      ),
+                      dialogBackgroundColor: white,
+                      textButtonTheme: TextButtonThemeData(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Color.fromRGBO(80, 157, 253, 1), // Botão OK/Cancelar
+                        ),
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
+              ).then((value) {
+                if (value != null) {
+                  setState(() {
+                    selectedDate = value;
+                    model.date = DateFormat('dd/MM/yyyy').format(value);
+                  });
+                }
+              });
 
               /*showMaterialDatePicker(------------------------------------------------------------------------------------------------------------------------------------------------------
                 headerColor: blue3,
@@ -667,27 +535,7 @@ showDatePicker(
                 }),
               );*/
             },
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 30.w),
-                  child: Icon(
-                    Icons.event,
-                    size: 40.sp,
-                    color: Colors.blue,
-                  ),
-                ),
-                Text(
-                  DateFormat(sharedPrefs.dateFormat).format(
-                      DateFormat('dd/MM/yyyy').parse(
-                          model.date!)),
-                  style: GoogleFonts.aBeeZee(
-                    fontSize: 21.5.sp,
-                  ),
-                ),
-              ],
-            ),
+            child: Row(mainAxisSize: MainAxisSize.min, children: [Padding(padding: EdgeInsets.only(right: 30.w), child: Icon(Icons.event, size: 40.sp, color: Colors.blue)), Text(DateFormat(sharedPrefs.dateFormat).format(DateFormat('dd/MM/yyyy').parse(model.date!)), style: GoogleFonts.aBeeZee(fontSize: 21.5.sp))]),
           ),
           Spacer(),
           GestureDetector(
@@ -698,38 +546,33 @@ showDatePicker(
               }
               Navigator.of(context).push(
                 showPicker(
-                    cancelText: getTranslated(context, 'Cancel') ?? 'Cancel',
-                    okText: getTranslated(context, 'Ok') ?? 'Ok',
-                    unselectedColor: grey,
-                    dialogInsetPadding: EdgeInsets.symmetric(
-                        horizontal: 50.w, vertical: 30.0.h),
-                    elevation: 12,
-                    context: context,
-                    value: selectedTime as Time,//---------------------------------------------------------------------------------------------------------------------
-                    is24HrFormat: true,
-                    onChange: (value) => setState(() {
-                          selectedTime = value;
-                          model.time = value.format(context);
-                        })),
+                  cancelText: getTranslated(context, 'Cancel') ?? 'Cancel',
+                  okText: getTranslated(context, 'Ok') ?? 'Ok',
+                  unselectedColor: grey,
+                  dialogInsetPadding: EdgeInsets.symmetric(horizontal: 50.w, vertical: 30.0.h),
+                  elevation: 12,
+                  context: context,
+                  value: selectedTime as Time, //---------------------------------------------------------------------------------------------------------------------
+                  is24HrFormat: true,
+                  onChange:
+                      (value) => setState(() {
+                        selectedTime = value;
+                        model.time = value.format(context);
+                      }),
+                ),
               );
             },
-            child: Text(
-              model.time!,
-              style: GoogleFonts.aBeeZee(
-                fontSize: 21.5.sp,
-              ),
-            ),
-          )
+            child: Text(model.time!, style: GoogleFonts.aBeeZee(fontSize: 21.5.sp)),
+          ),
         ],
       ),
     );
   }
 }
 
+//esse metodo é responsavel por salvar ou atualizar a entrada ou saida
 void saveInputFunc(BuildContext context, bool saveFunction) {
-  model.amount = _amountController.text.isEmpty
-      ? 0
-      : double.parse(_amountController.text.replaceAll(',', ''));
+  model.amount = _amountController.text.isEmpty ? 0 : double.parse(_amountController.text.replaceAll(',', ''));
   model.description = _DescriptionCardState.descriptionController.text;
   if (saveFunction) {
     DB.insert(model);
@@ -745,24 +588,13 @@ void saveInputFunc(BuildContext context, bool saveFunction) {
   }
 }
 
-Future<void> deleteInputFunction(
-  BuildContext context,
-) async {
+//esse metodo é responsavel por deletar a entrada ou saida
+Future<void> deleteInputFunction(BuildContext context) async {
   void onDeletion() {
     DB.delete(model.id!);
     Navigator.pop(context);
     customToast(context, 'Transaction has been deleted');
   }
 
-  Platform.isIOS
-      ? await iosDialog(
-          context,
-          'Are you sure you want to delete this transaction?',
-          'Delete',
-          onDeletion)
-      : await androidDialog(
-          context,
-          'Are you sure you want to delete this transaction?',
-          'Delete',
-          onDeletion);
+  Platform.isIOS ? await iosDialog(context, 'Are you sure you want to delete this transaction?', 'Delete', onDeletion) : await androidDialog(context, 'Are you sure you want to delete this transaction?', 'Delete', onDeletion);
 }

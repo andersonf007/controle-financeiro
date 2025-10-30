@@ -11,7 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'constants.dart';
 
 
-
+//essa classe é usada para criar uma caixa de seleção suspensa (dropdown) que permite ao usuário escolher uma data específica para análise ou relatório.
 class DropDownBox extends StatelessWidget {
   final bool forAnalysis;
   final String selectedDate;

@@ -4,6 +4,8 @@ import 'app_localization.dart';
 
 Locale locale(String languageCode) {
   switch (languageCode) {
+    case 'pt':
+      return Locale('pt', "PT");
     case 'en':
       return Locale('en', 'US');
     // case 'ar':
@@ -20,8 +22,7 @@ Locale locale(String languageCode) {
       return Locale('ja', "JP");
     case 'ko':
       return Locale('ko', 'KR');
-    case 'pt':
-      return Locale('pt', "PT");
+
     case 'ru':
       return Locale('ru', "RU");
     case 'tr':
@@ -41,5 +42,4 @@ String? getTranslated(BuildContext context, String key) {
   return AppLocalization.of(context)?.translate(key);
 }
 
-Map<String, String>? localizedMap(BuildContext context) =>
-    AppLocalization.of(context)?.localizedMap();
+Map<String, String>? localizedMap(BuildContext context) => AppLocalization.of(context)?.localizedMap();

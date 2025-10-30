@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     List<BottomNavigationBarItem> bottomItems = <BottomNavigationBarItem>[bottomNavigationBarItem(Icons.add, 'Input'), bottomNavigationBarItem(Icons.analytics_outlined, 'Analysis'), bottomNavigationBarItem(Icons.calendar_today, 'Calendar'), bottomNavigationBarItem(Icons.account_circle, 'Other')];
-
+    // barra de navegação inferior
     return Scaffold(
       bottomNavigationBar: Container(
         decoration: BoxDecoration(boxShadow: [BoxShadow(color: grey)]),
@@ -92,7 +92,7 @@ class _HomeState extends State<Home> {
           selectedFontSize: 16.sp,
           unselectedFontSize: 14.sp,
           backgroundColor: white,
-          selectedItemColor: Colors.amber[800],
+          selectedItemColor: const Color.fromARGB(255, 255, 136, 0),
           unselectedItemColor: Colors.black87,
           type: BottomNavigationBarType.fixed,
           items: bottomItems,

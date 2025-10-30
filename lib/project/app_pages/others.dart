@@ -26,7 +26,7 @@ class Other extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         primary: true,
-        appBar: PreferredSize(
+        appBar: PreferredSize(// esse widget é a barra de aplicativo onde tem o título e o ícone de rosto
           preferredSize: Size.fromHeight(
             150.h,
           ),
@@ -41,7 +41,7 @@ class Other extends StatelessWidget {
                   CircleAvatar(
                     child: CircleAvatar(
                         child: Icon(
-                          FontAwesomeIcons.smileBeam,
+                          FontAwesomeIcons.faceSmileBeam,
                           color: Colors.black,
                           size: 71.sp,
                         ),

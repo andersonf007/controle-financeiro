@@ -33,6 +33,7 @@ class Analysis extends StatefulWidget {
   _AnalysisState createState() => _AnalysisState();
 }
 
+//essa classe é a página de análise, que mostra os dados de despesas e receitas
 class _AnalysisState extends State<Analysis> {
   @override
   Widget build(BuildContext context) {
@@ -67,6 +68,7 @@ class _AnalysisState extends State<Analysis> {
   }
 }
 
+//essa classe é responsável por montar a linha que exibe a data selecionada e o dropdown para selecionar o período
 class ShowDate extends StatelessWidget {
   final bool forAnalysis;
   final String selectedDate;
@@ -90,12 +92,13 @@ class ShowDate extends StatelessWidget {
             ),
             DateDisplay(this.selectedDate),
             Spacer(),
-            DropDownBox(this.forAnalysis, this.selectedDate)
+            DropDownBox(this.forAnalysis, this.selectedDate) //seleciona o período
           ],
         ));
   }
 }
 
+//essa classe é responsável por exibir a data selecionada na página de análise
 class DateDisplay extends StatelessWidget {
   final String selectedDate;
   DateDisplay(this.selectedDate);
@@ -138,6 +141,7 @@ class DateDisplay extends StatelessWidget {
   }
 }
 
+//essa classe é responsável por exibir o quadro que mostra a receita e despesa
 class ShowMoneyFrame extends StatelessWidget {
   final String type;
   final double typeValue, balance;
@@ -203,6 +207,7 @@ class ShowDetails extends StatefulWidget {
   _ShowDetailsState createState() => _ShowDetailsState();
 }
 
+// essa classe é responsável calcular e exibir os detalhes de cada categoria de receita ou despesa juntamente com CategoryDetails
 class _ShowDetailsState extends State<ShowDetails> {
   Widget showInExDetails(
     BuildContext context,
@@ -431,6 +436,7 @@ class _ShowDetailsState extends State<ShowDetails> {
   }
 }
 
+// essa classe é responsável por exibir os detalhes da receita ou despesa quando não há dados
 class ShowNullDetail extends StatelessWidget {
   final double balanceValue;
   final List<InputModel>? chartData;
@@ -457,6 +463,7 @@ class ShowNullDetail extends StatelessWidget {
   }
 }
 
+//essa classe é responsável por exibir os detalhes de cada categoria
 class CategoryDetails extends StatelessWidget {
   final String type, category;
   final double amount;
