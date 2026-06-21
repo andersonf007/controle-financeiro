@@ -17,7 +17,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sharedPrefs = SharedPrefs();
 // constants/strings.dart
 // const String appCurrency = 'app_currency';
-late String currency;
+String currency = '';
+
 var incomeItems = sharedPrefs.getItems('income items');
 
 class SharedPrefs {
@@ -29,16 +30,22 @@ class SharedPrefs {
     }
   }
 
-    String get selectedDate => _sharedPrefs!.getString('selectedDate')!;
-
+  String get selectedDate {
+    final prefs = _sharedPrefs;
+    if (prefs == null) return 'Today';
+    return prefs.getString('selectedDate') ?? 'Today';
+  }
 
   set selectedDate(String value) {
     _sharedPrefs!.setString('selectedDate', value);
   }
 
-  String get appCurrency => _sharedPrefs!.getString('appCurrency') ?? Platform.localeName;
+  String get appCurrency => (_sharedPrefs?.getString('appCurrency') ?? Platform.localeName);
 
-  set appCurrency(String appCurrency) => _sharedPrefs!.setString('appCurrency', appCurrency);
+  set appCurrency(String appCurrency) {
+    if (_sharedPrefs == null) return;
+    _sharedPrefs!.setString('appCurrency', appCurrency);
+  }
 
   String get dateFormat => _sharedPrefs!.getString('dateFormat') ?? 'dd/MM/yyyy';
 
@@ -68,12 +75,17 @@ class SharedPrefs {
   }
 
   void getCurrency() {
-    if (_sharedPrefs!.containsKey('appCurrency')) {
-      var format = NumberFormat.simpleCurrency(locale: sharedPrefs.appCurrency);
-      currency = format.currencySymbol;
+    // fallback para evitar LateInitializationError
+    final prefs = _sharedPrefs;
+    if (prefs == null) {
+      currency = NumberFormat.simpleCurrency(locale: Platform.localeName).currencySymbol;
+      return;
+    }
+
+    if (prefs.containsKey('appCurrency')) {
+      currency = NumberFormat.simpleCurrency(locale: sharedPrefs.appCurrency).currencySymbol;
     } else {
-      var format = NumberFormat.simpleCurrency(locale: Platform.localeName);
-      currency = format.currencySymbol;
+      currency = NumberFormat.simpleCurrency(locale: Platform.localeName).currencySymbol;
     }
   }
 
