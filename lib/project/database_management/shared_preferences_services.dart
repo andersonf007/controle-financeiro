@@ -59,7 +59,11 @@ class SharedPrefs {
 
   set passcodeScreenLock(String value) => _sharedPrefs!.setString('passcodeScreenLock', value);
 
-  List<String> get parentExpenseItemNames => _sharedPrefs!.getStringList('parent expense item names')!;
+  List<String> get parentExpenseItemNames {
+    final prefs = _sharedPrefs;
+    if (prefs == null) return const <String>[];
+    return prefs.getStringList('parent expense item names') ?? const <String>[];
+  }
 
   // not yet use this set method
   set parentExpenseItemNames(List<String> parentExpenseItemNames) => _sharedPrefs!.setStringList('parent expense item names', parentExpenseItemNames);
@@ -92,9 +96,13 @@ class SharedPrefs {
   //jsonEncode turns a Map<String, dynamic> into a json string,
   //jsonDecode turns a json string into a Map<String, dynamic>
   List<CategoryItem> getItems(String parentItemName) {
-    List<String> itemsEncoded = _sharedPrefs!.getStringList(parentItemName)!;
-    List<CategoryItem> items = itemsEncoded.map((item) => CategoryItem.fromJson(jsonDecode(item))).toList();
-    return items;
+    final prefs = _sharedPrefs;
+    if (prefs == null) return const <CategoryItem>[];
+
+    final itemsEncoded = prefs.getStringList(parentItemName);
+    if (itemsEncoded == null) return const <CategoryItem>[];
+
+    return itemsEncoded.map((item) => CategoryItem.fromJson(jsonDecode(item))).toList();
   }
 
   void saveItems(String parentItemName, List<CategoryItem> items) {
