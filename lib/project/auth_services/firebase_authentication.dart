@@ -1,57 +1,73 @@
 import 'dart:async';
 
+import 'package:controle_financeiro/project/auth_services/firebase_erros.dart';
+import 'package:controle_financeiro/project/classes/custom_toast.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:money_assistant_2608/project/auth_services/firebase_erros.dart';
-import 'package:money_assistant_2608/project/classes/custom_toast.dart';
 
 class FirebaseAuthentication {
+  static final GoogleSignIn _googleSignIn = GoogleSignIn();
+
   static Future<FirebaseApp> initializeFireBase() async {
-    FirebaseApp firebaseApp = await Firebase.initializeApp();
-    return firebaseApp;
+    return await Firebase.initializeApp();
   }
 
   static Future<User?> googleSignIn({required BuildContext context}) async {
     User? user;
     FirebaseAuth auth = FirebaseAuth.instance;
-    final GoogleSignIn googleSignIn = GoogleSignIn();
-    final GoogleSignInAccount? googleSignInAccount = await googleSignIn.signIn();
 
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(accessToken: googleSignInAuthentication.accessToken, idToken: googleSignInAuthentication.idToken);
-      try {
-        final UserCredential userCredential = await auth.signInWithCredential(credential);
-        user = userCredential.user;
-      } on FirebaseException catch (e) {
-        if (e.code == 'account-exists-with-different-credentia') {
-          customToast(context, 'The account already exists with a different credential.');
-        } else if (e.code == 'invalid-credential') {
-          customToast(context, 'Error occurred while accessing credentials. Try again.');
-        }
-      } catch (e) {
-        customToast(context, 'Error occurred using Google Sign-In. Try again.');
+    try {
+      // 1. Tenta login silencioso primeiro
+      GoogleSignInAccount? googleUser = await _googleSignIn.signInSilently();
+
+      // 2. Se não funcionou, abre o seletor de conta
+      googleUser ??= await _googleSignIn.signIn();
+
+      if (googleUser == null) return null;
+
+      // 3. Na v6, authentication é assíncrono (com await)
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // 4. Cria a credencial do Firebase com idToken + accessToken
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
+      );
+
+      final UserCredential userCredential =
+          await auth.signInWithCredential(credential);
+      user = userCredential.user;
+
+    } on FirebaseException catch (e) {
+      if (e.code == 'account-exists-with-different-credential') {
+        customToast(context, 'A conta já existe com outra credencial.');
+      } else if (e.code == 'invalid-credential') {
+        customToast(context, 'Erro ao acessar credenciais. Tente novamente.');
+      } else {
+        customToast(context, 'Erro Firebase: ${e.message}');
       }
+    } catch (e) {
+      customToast(context, 'Erro no login com Google. Tente novamente.');
     }
+
     return user;
   }
 
   static Future<void> googleSignOut({required BuildContext context}) async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
-      await googleSignIn.signOut();
+      await _googleSignIn.signOut();
     } catch (e) {
-      customToast(context, 'Error signing out. Try again.');
+      customToast(context, 'Erro ao sair. Tente novamente.');
     }
   }
 
   static Future<String?> loginUser(String email, String senha) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: senha);
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: senha);
       return null;
     } on FirebaseAuthException catch (e) {
       return getErrorString(e.code);
@@ -59,89 +75,19 @@ class FirebaseAuthentication {
   }
 
   static Future<String?> signupUser(String email, String senha) async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
     try {
-      UserCredential userCredential = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
-      final user = userCredential.user;
-      if (user == null) {
-        return 'Error creating user. Please try again.';
+      final UserCredential userCredential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(email: email, password: senha);
+      if (userCredential.user == null) {
+        return 'Erro ao criar usuário. Tente novamente.';
       }
       return null;
     } on FirebaseAuthException catch (e) {
-      throw getErrorString(e.code);
+      return getErrorString(e.code);
     }
   }
 
-  static logout() async {
-    FirebaseAuth _auth = FirebaseAuth.instance;
-    await _auth.signOut();
+  static Future<void> logout() async {
+    await FirebaseAuth.instance.signOut();
   }
 }
-
-
-// final FirebaseAuth _auth = FirebaseAuth.instance;
-//
-// UserUid _userUid(User user) {
-//   return user != null ? UserUid(uid: user.uid) : null;
-// }
-//
-// // what is get?
-// Stream<UserUid> get user {
-//   return _auth.authStateChanges().map((User user) => _userUid(user));
-//   // .map(_userUid);
-// }
-//
-// // sign in anon
-// Future signInAnon() async {
-//   try {
-//     UserCredential result = await _auth.signInAnonymously();
-//     User user = result.user;
-//     return _userUid(user);
-//   } catch (e) {
-//     print(e.toString());
-//     return null;
-//   }
-// }
-//
-// // sign in with email and password
-// Future signInWithEmailAndPassword(String email, String password) async {
-//   try {
-//     UserCredential result = await _auth.signInWithEmailAndPassword(
-//         email: email, password: password);
-//     User user = result.user;
-//     return user;
-//   } catch (error) {
-//     print(error.toString());
-//     return null;
-//   }
-// }
-//
-// // register with email and password
-// Future registerWithEmailAndPassword(String email, String password) async {
-//   try {
-//     UserCredential result = await _auth.createUserWithEmailAndPassword(
-//         email: email, password: password);
-//     User user = result.user;
-//     return _userUid(user);
-//   } catch (error) {
-//     print(error.toString());
-//     return null;
-//   }
-// }
-//
-// // sign out
-// Future signOut() async {
-//   try {
-//     return await _auth.signOut();
-//   } catch (error) {
-//     print(error.toString());
-//     return null;
-//   }
-// }
-// }
-
-// class UserUid {
-//   final String uid;
-//
-//   UserUid({this.uid});
-// }

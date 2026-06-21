@@ -23,6 +23,25 @@
           "other_platform_oauth_client": []
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1084088522203:android:d95d0663f5a756534d83fe",
+        "android_client_info": {
+          "package_name": "com.unifortesistemas.controlefinanceiro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAEym7lpr7399ZGjv_nB06TfoNZnNRLAlI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
     }
   ],
   "configuration_version": "1"

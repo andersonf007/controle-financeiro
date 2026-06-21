@@ -1,12 +1,11 @@
 import 'dart:io' show Platform;
-import 'package:flutter/cupertino.dart';
+import 'package:controle_financeiro/project/app_pages/input.dart';
+import 'package:controle_financeiro/project/classes/alert_dialog.dart';
+import 'package:controle_financeiro/project/database_management/shared_preferences_services.dart';
+import 'package:controle_financeiro/project/localization/methods.dart';
+import 'package:controle_financeiro/project/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:money_assistant_2608/project/classes/alert_dialog.dart';
-import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
-import 'package:money_assistant_2608/project/localization/methods.dart';
-import 'package:money_assistant_2608/project/app_pages/input.dart';
-import 'package:money_assistant_2608/project/provider.dart';
 import 'package:provider/provider.dart';
 
 import 'category_item.dart';
@@ -35,7 +34,14 @@ class _SaveButtonState extends State<SaveButton> {
             widget.saveCategoryFunc!();
           }
         },
-        style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w), backgroundColor: Color.fromRGBO(236, 158, 66, 1), foregroundColor: white, overlayColor: grey, elevation: 10, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0.r))),
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+          backgroundColor: Color.fromRGBO(236, 158, 66, 1),
+          foregroundColor: white,
+          overlayColor: grey,
+          elevation: 10,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0.r)),
+        ),
         label: Text(getTranslated(context, 'Save')!, style: TextStyle(fontSize: 25.sp)),
         icon: Icon(Icons.save, size: 25.sp),
       ),
@@ -64,7 +70,15 @@ class SaveAndDeleteButton extends StatelessWidget {
               deleteCategoryFunction(context: context, categoryName: this.categoryName!, parentExpenseItem: this.parentExpenseItem, contextEx: this.contextEx, contextExEdit: this.contextExEdit, contextIn: this.contextIn, contextInEdit: this.contextInEdit);
             }
           },
-          style: ElevatedButton.styleFrom(padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w), backgroundColor: Color.fromRGBO(236, 158, 66, 1), foregroundColor: white, overlayColor: grey, side: BorderSide(color: red, width: 2.h), elevation: 10, shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0.r))),
+          style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+            backgroundColor: Color.fromRGBO(236, 158, 66, 1),
+            foregroundColor: white,
+            overlayColor: grey,
+            side: BorderSide(color: red, width: 2.h),
+            elevation: 10,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.0.r)),
+          ),
           icon: Icon(Icons.delete, size: 25.sp),
           label: Text(getTranslated(context, 'Delete')!, style: TextStyle(fontSize: 25.sp)),
         ),

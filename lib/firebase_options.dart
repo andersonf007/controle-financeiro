@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -51,7 +42,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAEym7lpr7399ZGjv_nB06TfoNZnNRLAlI',
-    appId: '1:1084088522203:android:21762464889a9e894d83fe',
+    appId: '1:1084088522203:android:d95d0663f5a756534d83fe',
     messagingSenderId: '1084088522203',
     projectId: 'projeto-de-despesas',
     storageBucket: 'projeto-de-despesas.firebasestorage.app',
@@ -65,4 +56,34 @@ class DefaultFirebaseOptions {
     storageBucket: 'projeto-de-despesas.firebasestorage.app',
     iosBundleId: 'com.example.moneyAssistant2608',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyDklKrheAYZ8ZN982PqUCUMeT8LbIgsCHM',
+    appId: '1:1084088522203:web:8ff93ebdf44289444d83fe',
+    messagingSenderId: '1084088522203',
+    projectId: 'projeto-de-despesas',
+    authDomain: 'projeto-de-despesas.firebaseapp.com',
+    storageBucket: 'projeto-de-despesas.firebasestorage.app',
+    measurementId: 'G-FZ4EQ0HRW7',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyCBBaZiQh1PJF_DT--Ety1ixD9sdy2rCMw',
+    appId: '1:1084088522203:ios:1c26735c759707fa4d83fe',
+    messagingSenderId: '1084088522203',
+    projectId: 'projeto-de-despesas',
+    storageBucket: 'projeto-de-despesas.firebasestorage.app',
+    iosBundleId: 'com.example.controleFinanceiro',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDklKrheAYZ8ZN982PqUCUMeT8LbIgsCHM',
+    appId: '1:1084088522203:web:2bbcfa686aa1a3f14d83fe',
+    messagingSenderId: '1084088522203',
+    projectId: 'projeto-de-despesas',
+    authDomain: 'projeto-de-despesas.firebaseapp.com',
+    storageBucket: 'projeto-de-despesas.firebasestorage.app',
+    measurementId: 'G-8ZBXPR0DVX',
+  );
+
 }

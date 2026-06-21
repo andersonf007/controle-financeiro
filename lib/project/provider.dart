@@ -1,6 +1,6 @@
+import 'package:controle_financeiro/project/classes/category_item.dart';
+import 'package:controle_financeiro/project/database_management/shared_preferences_services.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:money_assistant_2608/project/classes/category_item.dart';
-import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
 
 import 'classes/input_model.dart';
 import 'database_management/sqflite_services.dart';

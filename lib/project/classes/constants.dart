@@ -1,17 +1,11 @@
+import 'package:controle_financeiro/project/database_management/shared_preferences_services.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
 
 import 'category_item.dart';
 import 'input_model.dart';
 
-Color green = Color.fromRGBO(57, 157, 3, 1),
-    red = Color.fromRGBO(217, 89, 89, 1),
-    white = Color.fromRGBO(255, 255, 255, 1),
-    blue1 = Color.fromRGBO(210, 234, 251, 1),
-    blue2 = Color.fromRGBO(139, 205, 254, 1),
-    blue3 = Color.fromRGBO(89, 176, 222, 1),
-    grey = Colors.grey;
+Color green = Color.fromRGBO(57, 157, 3, 1), red = Color.fromRGBO(217, 89, 89, 1), white = Color.fromRGBO(255, 255, 255, 1), blue1 = Color.fromRGBO(210, 234, 251, 1), blue2 = Color.fromRGBO(139, 205, 254, 1), blue3 = Color.fromRGBO(89, 176, 222, 1), grey = Colors.grey;
 
 List<Color> chartPieColors = [
   //19
@@ -58,7 +52,7 @@ List<Color> chartPieColors = [
   Color.fromRGBO(194, 94, 78, 1),
   Color.fromRGBO(192, 72, 42, 1),
   Color.fromRGBO(176, 29, 51, 1),
-//18
+  //18
   Color.fromRGBO(198, 180, 251, 1),
   Color.fromRGBO(155, 128, 217, 1),
   Color.fromRGBO(112, 130, 212, 1),
@@ -79,40 +73,26 @@ List<Color> chartPieColors = [
   Color.fromRGBO(225, 123, 66, 1),
 ];
 
-String format(double number) =>
-    NumberFormat("#,###,###,###,###,###.##", "en_US").format(number);
+String format(double number) => NumberFormat("#,###,###,###,###,###.##", "en_US").format(number);
 
-IconData iconData(CategoryItem item) => IconData(item.iconCodePoint,
-    fontPackage: item.iconFontPackage, fontFamily: item.iconFontFamily);
+IconData iconData(CategoryItem item) => IconData(item.iconCodePoint, fontPackage: item.iconFontPackage, fontFamily: item.iconFontFamily);
 
 //should description be '' or null?
-CategoryItem categoryItem(IconData icon, String name) =>
-    CategoryItem(icon.codePoint, icon.fontPackage, icon.fontFamily, name, '');
+CategoryItem categoryItem(IconData icon, String name) => CategoryItem(icon.codePoint, icon.fontPackage, icon.fontFamily, name, '');
 
 Widget? connectionUI(AsyncSnapshot<List<InputModel>> snapshot) {
   if (snapshot.connectionState == ConnectionState.none) {
-    return Center(
-      child: CircularProgressIndicator(),
-    );
+    return Center(child: CircularProgressIndicator());
   }
   if (snapshot.hasError) {
     print('${snapshot.error}');
-    return Center(
-      child: CircularProgressIndicator(),
-    );
+    return Center(child: CircularProgressIndicator());
   }
 }
 
-List<CategoryItem> createItemList({
-  List<InputModel>? transactions,
-  required bool forAnalysisPage,
-  isIncomeType,
-  forSelectIconPage,
-}) {
+List<CategoryItem> createItemList({List<InputModel>? transactions, required bool forAnalysisPage, isIncomeType, forSelectIconPage}) {
   List<CategoryItem> itemList = [], items = [], expenseItems = [];
-  sharedPrefs.getAllExpenseItemsLists().forEach((parentExpenseItem) =>
-      parentExpenseItem
-          .forEach((expenseItem) => expenseItems.add(expenseItem)));
+  sharedPrefs.getAllExpenseItemsLists().forEach((parentExpenseItem) => parentExpenseItem.forEach((expenseItem) => expenseItems.add(expenseItem)));
 
   if (forAnalysisPage) {
     items = isIncomeType ? incomeItems : expenseItems;
@@ -129,12 +109,7 @@ List<CategoryItem> createItemList({
           break;
         }
         if (i == items.length - 1) {
-          CategoryItem itemElse = CategoryItem(
-              Icons.category_outlined.codePoint,
-              Icons.category_outlined.fontPackage,
-              Icons.category_outlined.fontFamily,
-              transaction.category!,
-              transaction.description);
+          CategoryItem itemElse = CategoryItem(Icons.category_outlined.codePoint, Icons.category_outlined.fontPackage, Icons.category_outlined.fontFamily, transaction.category!, transaction.description);
           itemList.add(itemElse);
         }
       }
@@ -145,71 +120,37 @@ List<CategoryItem> createItemList({
 
 //for analysis, report
 
-final DateTime now = DateTime.now(),
-    todayDT = DateTime(now.year, now.month, now.day),
-    startOfThisWeek = todayDT.subtract(Duration(days: todayDT.weekday - 1)),
-    startOfThisMonth = DateTime(todayDT.year, todayDT.month, 1),
-    startOfThisYear = DateTime(todayDT.year, 1, 1),
-    startOfThisQuarter = DateTime(todayDT.year, quarterStartMonth, 1);
+final DateTime now = DateTime.now(), todayDT = DateTime(now.year, now.month, now.day), startOfThisWeek = todayDT.subtract(Duration(days: todayDT.weekday - 1)), startOfThisMonth = DateTime(todayDT.year, todayDT.month, 1), startOfThisYear = DateTime(todayDT.year, 1, 1), startOfThisQuarter = DateTime(todayDT.year, quarterStartMonth, 1);
 
-final int thisQuarter = (todayDT.month + 2) ~/ 3,
-    quarterStartMonth = 3 * thisQuarter - 2;
-final List<String> timeline = [
-  'Today',
-  'This week',
-  'This month',
-  'This quarter',
-  'This year',
-  'All'
-];
+final int thisQuarter = (todayDT.month + 2) ~/ 3, quarterStartMonth = 3 * thisQuarter - 2;
+final List<String> timeline = ['Today', 'This week', 'This month', 'This quarter', 'This year', 'All'];
 
-InputModel inputModel(data) => InputModel(
-    id: data.id,
-    type: data.type,
-    amount: data.amount!,
-    category: data.category!,
-    description: data.description!,
-    date: data.date,
-    time: data.time);
+InputModel inputModel(data) => InputModel(id: data.id, type: data.type, amount: data.amount!, category: data.category!, description: data.description!, date: data.date, time: data.time);
 
-List<InputModel> filterData(
-    BuildContext context, List<InputModel> data, String selectedDate) {
+List<InputModel> filterData(BuildContext context, List<InputModel> data, String selectedDate) {
   // filter data based on user's selected day
   return (data
           .map((data) {
-            DateTime dateSelectedDT =
-                DateFormat('dd/MM/yyyy').parse(data.date!);
+            DateTime dateSelectedDT = DateFormat('dd/MM/yyyy').parse(data.date!);
 
             if (selectedDate == 'Today') {
-              if (dateSelectedDT.isAfter(todayDT.subtract(Duration(days: 1))) &&
-                  dateSelectedDT.isBefore(todayDT.add(Duration(days: 1)))) {
+              if (dateSelectedDT.isAfter(todayDT.subtract(Duration(days: 1))) && dateSelectedDT.isBefore(todayDT.add(Duration(days: 1)))) {
                 return inputModel(data);
               }
             } else if (selectedDate == 'This week') {
-              if (dateSelectedDT
-                      .isAfter(startOfThisWeek.subtract(Duration(days: 1))) &&
-                  dateSelectedDT
-                      .isBefore(startOfThisWeek.add(Duration(days: 7)))) {
+              if (dateSelectedDT.isAfter(startOfThisWeek.subtract(Duration(days: 1))) && dateSelectedDT.isBefore(startOfThisWeek.add(Duration(days: 7)))) {
                 return inputModel(data);
               }
             } else if (selectedDate == 'This month') {
-              if (dateSelectedDT
-                      .isAfter(startOfThisMonth.subtract(Duration(days: 1))) &&
-                  dateSelectedDT
-                      .isBefore(DateTime(todayDT.year, todayDT.month + 1, 1))) {
+              if (dateSelectedDT.isAfter(startOfThisMonth.subtract(Duration(days: 1))) && dateSelectedDT.isBefore(DateTime(todayDT.year, todayDT.month + 1, 1))) {
                 return inputModel(data);
               }
             } else if (selectedDate == 'This quarter') {
-              if (dateSelectedDT.isAfter(
-                      startOfThisQuarter.subtract(Duration(days: 1))) &&
-                  dateSelectedDT.isBefore(DateTime(startOfThisQuarter.year,
-                      startOfThisQuarter.month + 3, 1))) {
+              if (dateSelectedDT.isAfter(startOfThisQuarter.subtract(Duration(days: 1))) && dateSelectedDT.isBefore(DateTime(startOfThisQuarter.year, startOfThisQuarter.month + 3, 1))) {
                 return inputModel(data);
               }
             } else if (selectedDate == 'This year') {
-              if (dateSelectedDT
-                      .isAfter(startOfThisYear.subtract(Duration(days: 1))) &&
-                  dateSelectedDT.isBefore(DateTime(todayDT.year + 1, 1, 1))) {
+              if (dateSelectedDT.isAfter(startOfThisYear.subtract(Duration(days: 1))) && dateSelectedDT.isBefore(DateTime(todayDT.year + 1, 1, 1))) {
                 return inputModel(data);
               }
             } else {

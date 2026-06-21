@@ -1,18 +1,12 @@
+import 'package:controle_financeiro/project/classes/constants.dart';
+import 'package:controle_financeiro/project/localization/methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:money_assistant_2608/project/classes/constants.dart';
-import 'package:money_assistant_2608/project/localization/methods.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 class CustomKeyboard extends StatelessWidget {
-  CustomKeyboard(
-      {required this.panelController,
-       this.mainFocus,
-       this.nextFocus,
-      required this.onTextInput,
-      required this.onBackspace,
-      required this.page});
+  CustomKeyboard({required this.panelController, this.mainFocus, this.nextFocus, required this.onTextInput, required this.onBackspace, required this.page});
   final PanelController panelController;
   final FocusNode? mainFocus;
   final FocusNode? nextFocus;
@@ -21,27 +15,8 @@ class CustomKeyboard extends StatelessWidget {
   final Widget page;
   List<TextKey> generatedKeys() {
     List<TextKey> keys = [];
-    for (String i in [
-      '1',
-      '2',
-      '3',
-      '4',
-      '5',
-      '6',
-      '7',
-      '8',
-      '9',
-      '.',
-      '0',
-      ''
-    ]) {
-      keys.add(
-        TextKey(
-          text: i,
-          onTextInput: this.onTextInput,
-          onBackspace: this.onBackspace,
-        ),
-      );
+    for (String i in ['1', '2', '3', '4', '5', '6', '7', '8', '9', '.', '0', '']) {
+      keys.add(TextKey(text: i, onTextInput: this.onTextInput, onBackspace: this.onBackspace));
     }
     return keys;
   }
@@ -51,8 +26,9 @@ class CustomKeyboard extends StatelessWidget {
     return Container(
       color: white,
       child: Padding(
-          padding: EdgeInsets.only(bottom: 25.h),
-          child: Column(children: [
+        padding: EdgeInsets.only(bottom: 25.h),
+        child: Column(
+          children: [
             SizedBox(
               height: 52.h,
               child: Padding(
@@ -67,9 +43,8 @@ class CustomKeyboard extends StatelessWidget {
                       },
                       child: SizedBox(
                         height: 35.h,
-                        width:60.w,
-                        child: Icon(Icons.keyboard_arrow_down,
-                            size: 25.sp, color: Colors.blueGrey),
+                        width: 60.w,
+                        child: Icon(Icons.keyboard_arrow_down, size: 25.sp, color: Colors.blueGrey),
                       ),
                     ),
                     // GestureDetector(
@@ -96,30 +71,23 @@ class CustomKeyboard extends StatelessWidget {
                       },
                       child: Text(
                         getTranslated(context, "Done")!,
-                        style: TextStyle(
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.blue),
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.blue),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
             ),
-            Wrap(
-              children: generatedKeys(),
-            ),
-          ])),
+            Wrap(children: generatedKeys()),
+          ],
+        ),
+      ),
     );
   }
 }
 
 class TextKey extends StatelessWidget {
-  const TextKey({
-    required this.text,
-    this.onBackspace,
-    this.onTextInput,
-  });
+  const TextKey({required this.text, this.onBackspace, this.onTextInput});
   final VoidCallback? onBackspace;
   final String text;
   final ValueSetter<String>? onTextInput;
@@ -133,21 +101,11 @@ class TextKey extends StatelessWidget {
       child: Material(
         child: InkWell(
           onTap: () {
-            this.text.isEmpty
-                ? this.onBackspace?.call()
-                : this.onTextInput?.call(this.text);
+            this.text.isEmpty ? this.onBackspace?.call() : this.onTextInput?.call(this.text);
           },
           child: Center(
-              child: this.text.isEmpty
-                  ? Icon(
-                      Icons.backspace_outlined,
-                      color: red,
-                    )
-                  : Text(
-                      this.text,
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    )),
+            child: this.text.isEmpty ? Icon(Icons.backspace_outlined, color: red) : Text(this.text, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          ),
         ),
       ),
     );

@@ -1,9 +1,9 @@
+import 'package:controle_financeiro/project/auth_pages/sign_in.dart';
+import 'package:controle_financeiro/project/auth_services/firebase_authentication.dart';
+import 'package:controle_financeiro/project/classes/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:money_assistant_2608/project/auth_pages/sign_in.dart';
-import 'package:money_assistant_2608/project/auth_services/firebase_authentication.dart';
-import 'package:money_assistant_2608/project/classes/constants.dart';
 
 // final AuthService _auth = AuthService();
 
@@ -36,11 +36,39 @@ class _UserAccountState extends State<UserAccount> {
                     },
                   ),
                 ),
-                Center(child: CircleAvatar(child: CircleAvatar(radius: 30.r, backgroundColor: Color.fromRGBO(210, 234, 251, 1)), radius: 35.r, backgroundColor: Colors.grey)),
+                Center(
+                  child: CircleAvatar(
+                    child: CircleAvatar(radius: 30.r, backgroundColor: Color.fromRGBO(210, 234, 251, 1)),
+                    radius: 35.r,
+                    backgroundColor: Colors.grey,
+                  ),
+                ),
                 SizedBox(height: 10.h),
-                Center(child: Text("User name", style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold))),
+                Center(
+                  child: Text(
+                    "User name",
+                    style: TextStyle(fontSize: 25.sp, fontWeight: FontWeight.bold),
+                  ),
+                ),
                 SizedBox(height: 15.h),
-                Center(child: Container(width: 100.w, height: 30.h, decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), border: Border.all(color: Colors.blueGrey, width: 0.5)), child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.crop_free), SizedBox(width: 3.w), Text("Free", style: TextStyle(fontSize: 20.sp))]))),
+                Center(
+                  child: Container(
+                    width: 100.w,
+                    height: 30.h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(color: Colors.blueGrey, width: 0.5),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.crop_free),
+                        SizedBox(width: 3.w),
+                        Text("Free", style: TextStyle(fontSize: 20.sp)),
+                      ],
+                    ),
+                  ),
+                ),
                 SizedBox(height: 20.h),
               ],
             ),
@@ -59,7 +87,22 @@ class _UserAccountState extends State<UserAccount> {
           //   color: Color.fromRGBO(210, 234, 251, 1),
           // ),
           Divider(height: 0, thickness: 0.8.w, color: grey),
-          Padding(padding: EdgeInsets.symmetric(horizontal: 10.w), child: SizedBox(height: 60.h, child: Row(children: [IconButton(icon: Icon(Icons.sports_golf, size: 30.sp), onPressed: () {}), SizedBox(width: 10.w), Text('Explore Premium', style: TextStyle(fontSize: 25.sp))]))),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: SizedBox(
+              height: 60.h,
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.sports_golf, size: 30.sp),
+                    onPressed: () {},
+                  ),
+                  SizedBox(width: 10.w),
+                  Text('Explore Premium', style: TextStyle(fontSize: 25.sp)),
+                ],
+              ),
+            ),
+          ),
 
           Divider(height: 0.h, thickness: 0.8.w, color: grey),
 

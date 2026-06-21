@@ -1,5 +1,13 @@
 import 'dart:core';
 import 'dart:io' show Platform;
+import 'package:controle_financeiro/project/classes/alert_dialog.dart';
+import 'package:controle_financeiro/project/classes/app_bar.dart';
+import 'package:controle_financeiro/project/classes/category_item.dart';
+import 'package:controle_financeiro/project/classes/custom_toast.dart';
+import 'package:controle_financeiro/project/classes/input_model.dart';
+import 'package:controle_financeiro/project/classes/keyboard.dart';
+import 'package:controle_financeiro/project/classes/saveOrSaveAndDeleteButtons.dart';
+import 'package:controle_financeiro/project/database_management/sqflite_services.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,17 +17,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_actions/keyboard_actions.dart';
-import 'package:money_assistant_2608/project/classes/alert_dialog.dart';
-import 'package:money_assistant_2608/project/classes/app_bar.dart';
-import 'package:money_assistant_2608/project/classes/category_item.dart';
-import 'package:money_assistant_2608/project/classes/constants.dart';
-import 'package:money_assistant_2608/project/classes/custom_toast.dart';
-import 'package:money_assistant_2608/project/classes/input_model.dart';
-import 'package:money_assistant_2608/project/classes/keyboard.dart';
-import 'package:money_assistant_2608/project/classes/saveOrSaveAndDeleteButtons.dart';
-import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
-import 'package:money_assistant_2608/project/database_management/sqflite_services.dart';
-import 'package:money_assistant_2608/project/localization/methods.dart';
+import 'package:controle_financeiro/project/classes/constants.dart';
+import 'package:controle_financeiro/project/database_management/shared_preferences_services.dart';
+import 'package:controle_financeiro/project/localization/language.dart';
+import 'package:controle_financeiro/project/localization/methods.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
@@ -62,10 +66,17 @@ class _AddInputState extends State<AddInput> {
           backgroundColor: blue1,
           appBar: InExAppBar(true), // AppBar da despesas e receitas
           body:
-          // ChangeNotifierProvider<ChangeModelType>(
-          //     create: (context) => ChangeModelType(),
-          //     child:
-          PanelForKeyboard(TabBarView(children: [AddEditInput(type: 'Expense', formKey: _formKey2), AddEditInput(type: 'Income', formKey: _formKey1)])),
+              // ChangeNotifierProvider<ChangeModelType>(
+              //     create: (context) => ChangeModelType(),
+              //     child:
+              PanelForKeyboard(
+                TabBarView(
+                  children: [
+                    AddEditInput(type: 'Expense', formKey: _formKey2),
+                    AddEditInput(type: 'Income', formKey: _formKey1),
+                  ],
+                ),
+              ),
         ),
       ),
     )
@@ -174,11 +185,10 @@ class PanelForKeyboard extends StatelessWidget {
         onBackspace: () {
           _backspace();
         },
-        page:
-            model.type == 'Income'
-                // Provider.of<ChangeModelType>(context).modelType == 'Income'
-                ? IncomeCategory()
-                : ExpenseCategory(),
+        page: model.type == 'Income'
+            // Provider.of<ChangeModelType>(context).modelType == 'Income'
+            ? IncomeCategory()
+            : ExpenseCategory(),
       ),
       body: this.body,
     );
@@ -211,8 +221,17 @@ class AddEditInput extends StatelessWidget {
         children: [
           AmountCard(),
           SizedBox(height: 30.h),
-          Container(decoration: BoxDecoration(color: white, border: Border.all(color: grey, width: 0.6.w)), child: Column(children: [CategoryCard(), DescriptionCard(), DateCard()])),
-          Padding(padding: EdgeInsets.symmetric(vertical: 70.h), child: this.inputModel != null ? SaveAndDeleteButton(saveAndDeleteInput: true, formKey: this.formKey) : SaveButton(true, null, true)),
+          Container(
+            decoration: BoxDecoration(
+              color: white,
+              border: Border.all(color: grey, width: 0.6.w),
+            ),
+            child: Column(children: [CategoryCard(), DescriptionCard(), DateCard()]),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 70.h),
+            child: this.inputModel != null ? SaveAndDeleteButton(saveAndDeleteInput: true, formKey: this.formKey) : SaveButton(true, null, true),
+          ),
         ],
       ),
     );
@@ -242,7 +261,12 @@ class _AmountCardState extends State<AmountCard> {
   Widget build(BuildContext context) {
     Color colorMain = model.type == 'Income' ? green : red;
     return Container(
-      decoration: BoxDecoration(color: white, border: Border(bottom: BorderSide(color: grey, width: 0.6.h))),
+      decoration: BoxDecoration(
+        color: white,
+        border: Border(
+          bottom: BorderSide(color: grey, width: 0.6.h),
+        ),
+      ),
       child: Padding(
         padding: EdgeInsets.only(top: 15.h, bottom: 30.h, right: 20.w, left: 20.w),
         child: Column(
@@ -267,17 +291,19 @@ class _AmountCardState extends State<AmountCard> {
               decoration: InputDecoration(
                 hintText: '0', //valor inicial da quantia que o usuario vai digitar
                 hintStyle: GoogleFonts.aBeeZee(color: colorMain, fontSize: 35.sp, fontWeight: FontWeight.bold),
-                icon: Padding(padding: EdgeInsets.only(right: 5.w), child: Icon(Icons.monetization_on, size: 45.sp, color: colorMain)),
-                suffixIcon:
-                    _amountController.text.length > 0
-                        ? IconButton(
-                          icon: Icon(Icons.clear, size: 24.sp),
-                          onPressed: () {
-                            print("object");
-                            _amountController.clear();
-                          },
-                        )
-                        : SizedBox(),
+                icon: Padding(
+                  padding: EdgeInsets.only(right: 5.w),
+                  child: Icon(Icons.monetization_on, size: 45.sp, color: colorMain),
+                ),
+                suffixIcon: _amountController.text.length > 0
+                    ? IconButton(
+                        icon: Icon(Icons.clear, size: 24.sp),
+                        onPressed: () {
+                          print("object");
+                          _amountController.clear();
+                        },
+                      )
+                    : SizedBox(),
               ),
             ),
           ],
@@ -316,7 +342,16 @@ class _CategoryCardState extends State<CategoryCard> {
                 child: Row(
                   children: [
                     Icon(iconData(categoryItem), size: 40.sp, color: model.type == 'Income' ? green : red),
-                    Expanded(child: Padding(padding: EdgeInsets.only(left: 31.w), child: Text(getTranslated(context, categoryItem.text) ?? categoryItem.text, style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold), overflow: TextOverflow.ellipsis))),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.only(left: 31.w),
+                        child: Text(
+                          getTranslated(context, categoryItem.text) ?? categoryItem.text,
+                          style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
                     // Spacer(),
                     Icon(Icons.arrow_forward_ios_outlined, size: 20.sp),
                   ],
@@ -375,7 +410,11 @@ class _DescriptionCardState extends State<DescriptionCard> {
                           FocusScope.of(context).requestFocus(amountFocusNode);
                           _pc.open();
                         },
-                        child: SizedBox(height: 35.h, width: 60.w, child: Icon(Icons.keyboard_arrow_up, size: 25.sp, color: Colors.blueGrey)),
+                        child: SizedBox(
+                          height: 35.h,
+                          width: 60.w,
+                          child: Icon(Icons.keyboard_arrow_up, size: 25.sp, color: Colors.blueGrey),
+                        ),
                       ),
                       // GestureDetector(
                       //   onTap: () {
@@ -395,7 +434,13 @@ class _DescriptionCardState extends State<DescriptionCard> {
                       //         color: Colors.blueGrey),
                       //   ),
                       // ),
-                      GestureDetector(onTap: () => node.unfocus(), child: Text(getTranslated(context, "Done")!, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.blue))),
+                      GestureDetector(
+                        onTap: () => node.unfocus(),
+                        child: Text(
+                          getTranslated(context, "Done")!,
+                          style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.blue),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -440,16 +485,18 @@ class _DescriptionCardState extends State<DescriptionCard> {
                 border: InputBorder.none,
                 hintText: getTranslated(context, 'Description'),
                 hintStyle: GoogleFonts.cousine(fontSize: 22.sp, fontStyle: FontStyle.italic),
-                suffixIcon:
-                    descriptionController.text.length > 0
-                        ? IconButton(
-                          icon: Icon(Icons.clear, size: 20.sp),
-                          onPressed: () {
-                            descriptionController.clear();
-                          },
-                        )
-                        : SizedBox(),
-                icon: Padding(padding: EdgeInsets.only(right: 15.w), child: Icon(Icons.description_outlined, size: 40.sp, color: Colors.blueGrey)),
+                suffixIcon: descriptionController.text.length > 0
+                    ? IconButton(
+                        icon: Icon(Icons.clear, size: 20.sp),
+                        onPressed: () {
+                          descriptionController.clear();
+                        },
+                      )
+                    : SizedBox(),
+                icon: Padding(
+                  padding: EdgeInsets.only(right: 15.w),
+                  child: Icon(Icons.description_outlined, size: 40.sp, color: Colors.blueGrey),
+                ),
               ),
             ),
           ),
@@ -535,7 +582,16 @@ class _DateCardState extends State<DateCard> {
                 }),
               );*/
             },
-            child: Row(mainAxisSize: MainAxisSize.min, children: [Padding(padding: EdgeInsets.only(right: 30.w), child: Icon(Icons.event, size: 40.sp, color: Colors.blue)), Text(DateFormat(sharedPrefs.dateFormat).format(DateFormat('dd/MM/yyyy').parse(model.date!)), style: GoogleFonts.aBeeZee(fontSize: 21.5.sp))]),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 30.w),
+                  child: Icon(Icons.event, size: 40.sp, color: Colors.blue),
+                ),
+                Text(DateFormat(sharedPrefs.dateFormat).format(DateFormat('dd/MM/yyyy').parse(model.date!)), style: GoogleFonts.aBeeZee(fontSize: 21.5.sp)),
+              ],
+            ),
           ),
           Spacer(),
           GestureDetector(
@@ -554,11 +610,10 @@ class _DateCardState extends State<DateCard> {
                   context: context,
                   value: selectedTime as Time, //---------------------------------------------------------------------------------------------------------------------
                   is24HrFormat: true,
-                  onChange:
-                      (value) => setState(() {
-                        selectedTime = value;
-                        model.time = value.format(context);
-                      }),
+                  onChange: (value) => setState(() {
+                    selectedTime = value;
+                    model.time = value.format(context);
+                  }),
                 ),
               );
             },

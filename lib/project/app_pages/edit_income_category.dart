@@ -1,11 +1,9 @@
+
+import 'package:controle_financeiro/project/classes/app_bar.dart';
+import 'package:controle_financeiro/project/classes/constants.dart';
+import 'package:controle_financeiro/project/localization/methods.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money_assistant_2608'
-    '/project/classes/app_bar.dart';
-import 'package:money_assistant_2608'
-    '/project/classes/constants.dart';
-import 'package:money_assistant_2608'
-    '/project/localization/methods.dart';
 import 'package:provider/provider.dart';
 import '../provider.dart';
 import 'add_category.dart';

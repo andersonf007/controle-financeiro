@@ -5,13 +5,13 @@
 // import 'package:flutter_screenutil/flutter_screenutil.dart';
 // import 'package:google_fonts/google_fonts.dart';
 // import 'package:intl/intl.dart';
-// import 'package:money_assistant_2608/project/classes/app_bar.dart';
-// import 'package:money_assistant_2608/project/classes/category_item.dart';
-// import 'package:money_assistant_2608/project/classes/constants.dart';
-// import 'package:money_assistant_2608/project/classes/input_model.dart';
-// import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
-// import 'package:money_assistant_2608/project/database_management/sqflite_services.dart';
-// import 'package:money_assistant_2608/project/localization/methods.dart';
+// import 'package:Controle_financeiro/project/classes/app_bar.dart';
+// import 'package:Controle_financeiro/project/classes/category_item.dart';
+// import 'package:Controle_financeiro/project/classes/constants.dart';
+// import 'package:Controle_financeiro/project/classes/input_model.dart';
+// import 'package:Controle_financeiro/project/database_management/shared_preferences_services.dart';
+// import 'package:Controle_financeiro/project/database_management/sqflite_services.dart';
+// import 'package:Controle_financeiro/project/localization/methods.dart';
 // import 'package:table_calendar/table_calendar.dart';
 //
 // import '../classes/input_model.dart';

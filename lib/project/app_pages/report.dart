@@ -1,19 +1,23 @@
 /// Package import
+import 'package:controle_financeiro/project/classes/alert_dialog.dart';
+import 'package:controle_financeiro/project/classes/app_bar.dart';
+import 'package:controle_financeiro/project/classes/custom_toast.dart';
+import 'package:controle_financeiro/project/classes/dropdown_box.dart';
+import 'package:controle_financeiro/project/classes/input_model.dart';
+import 'package:controle_financeiro/project/database_management/sqflite_services.dart';
+import 'package:controle_financeiro/project/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_swipe_action_cell/core/cell.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:money_assistant_2608/project/classes/alert_dialog.dart';
-import 'package:money_assistant_2608/project/classes/app_bar.dart';
-import 'package:money_assistant_2608/project/classes/constants.dart';
-import 'package:money_assistant_2608/project/classes/custom_toast.dart';
-import 'package:money_assistant_2608/project/classes/input_model.dart';
-import 'package:money_assistant_2608/project/classes/dropdown_box.dart';
-import 'package:money_assistant_2608/project/database_management/shared_preferences_services.dart';
-import 'package:money_assistant_2608/project/database_management/sqflite_services.dart';
-import 'package:money_assistant_2608/project/localization/methods.dart';
-import 'package:money_assistant_2608/project/provider.dart';
+import 'package:controle_financeiro/project/classes/constants.dart';
+import 'package:controle_financeiro/project/database_management/shared_preferences_services.dart';
+import 'package:controle_financeiro/project/localization/language.dart';
+import 'package:controle_financeiro/project/localization/methods.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'dart:io' show Platform;
 
@@ -49,7 +53,22 @@ class _ReportState extends State<Report> {
         children: [
           Padding(
             padding: EdgeInsets.only(top: 17.h, bottom: 15.h, left: 7.w, right: 7.w),
-            child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [Padding(padding: EdgeInsets.only(right: 15.w), child: Icon(this.widget.icon, size: 30.sp, color: color)), Flexible(child: Text('${getTranslated(context, widget.category) ?? widget.category} ($year)', style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold, color: color), overflow: TextOverflow.ellipsis))]),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 15.w),
+                  child: Icon(this.widget.icon, size: 30.sp, color: color),
+                ),
+                Flexible(
+                  child: Text(
+                    '${getTranslated(context, widget.category) ?? widget.category} ($year)',
+                    style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.bold, color: color),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
           ),
           //essa parte do codigo cria o grafico de área que exibe as transações financeiras ao longo do ano,
           Expanded(child: ReportBody(widget.type, widget.category, widget.selectedDate, color, widget.icon)),
@@ -137,23 +156,22 @@ class _ReportBodyState extends State<ReportBody> {
                 return MonthAmount(month, monthAmount);
               }
 
-              List<MonthAmount>? monthBasedTransactionList =
-                  isLeapYear(year)
-                      ? []
-                      : [
-                        monthBasedTransaction('Jan', startOfThisYear.subtract(Duration(days: 1)), 30),
-                        monthBasedTransaction('Feb', date(30), 58),
-                        monthBasedTransaction('Mar', date(58), 89),
-                        monthBasedTransaction('Apr', date(89), 119),
-                        monthBasedTransaction('May', date(119), 150),
-                        monthBasedTransaction('Jun', date(150), 180),
-                        monthBasedTransaction('Jul', date(180), 211),
-                        monthBasedTransaction('Aug', date(211), 242),
-                        monthBasedTransaction('Sep', date(242), 272),
-                        monthBasedTransaction('Oct', date(272), 302),
-                        monthBasedTransaction('Nov', date(302), 333),
-                        monthBasedTransaction('Dec', date(333), 364),
-                      ];
+              List<MonthAmount>? monthBasedTransactionList = isLeapYear(year)
+                  ? []
+                  : [
+                      monthBasedTransaction('Jan', startOfThisYear.subtract(Duration(days: 1)), 30),
+                      monthBasedTransaction('Feb', date(30), 58),
+                      monthBasedTransaction('Mar', date(58), 89),
+                      monthBasedTransaction('Apr', date(89), 119),
+                      monthBasedTransaction('May', date(119), 150),
+                      monthBasedTransaction('Jun', date(150), 180),
+                      monthBasedTransaction('Jul', date(180), 211),
+                      monthBasedTransaction('Aug', date(211), 242),
+                      monthBasedTransaction('Sep', date(242), 272),
+                      monthBasedTransaction('Oct', date(272), 302),
+                      monthBasedTransaction('Nov', date(302), 333),
+                      monthBasedTransaction('Dec', date(333), 364),
+                    ];
 
               double maximumMonthAmount = monthBasedTransactionList[0].amount;
               for (int i = 0; i < monthBasedTransactionList.length; i++) {
@@ -182,7 +200,14 @@ class _ReportBodyState extends State<ReportBody> {
                           majorGridLines: MajorGridLines(width: 0),
                         ),
                         // tooltipBehavior: _tooltipBehavior,
-                        primaryYAxis: NumericAxis(majorGridLines: MajorGridLines(width: 0), minimum: 0, maximum: maximumMonthAmount, labelFormat: '{value}', axisLine: AxisLine(width: 4.h), majorTickLines: MajorTickLines(size: 5.sp)),
+                        primaryYAxis: NumericAxis(
+                          majorGridLines: MajorGridLines(width: 0),
+                          minimum: 0,
+                          maximum: maximumMonthAmount,
+                          labelFormat: '{value}',
+                          axisLine: AxisLine(width: 4.h),
+                          majorTickLines: MajorTickLines(size: 5.sp),
+                        ),
                         series: _getGradientAreaSeries(this.widget.type, monthBasedTransactionList),
                         onMarkerRender: (MarkerRenderArgs args) {
                           if (this.widget.type == 'Income') {
@@ -281,12 +306,11 @@ class _ReportBodyState extends State<ReportBody> {
                                       // exibe o valor total das transações selecionadas
                                       '${format(totalAmount.toDouble())} $currency',
                                       style: GoogleFonts.aBeeZee(
-                                        fontSize:
-                                            format(totalAmount.toDouble()).toString().length > 18
-                                                ? 14.sp
-                                                : format(totalAmount.toDouble()).toString().length > 14
-                                                ? 17.sp
-                                                : 20.sp,
+                                        fontSize: format(totalAmount.toDouble()).toString().length > 18
+                                            ? 14.sp
+                                            : format(totalAmount.toDouble()).toString().length > 14
+                                            ? 17.sp
+                                            : 20.sp,
                                         fontStyle: FontStyle.italic,
                                         fontWeight: FontWeight.bold,
                                         color: widget.color,
@@ -309,11 +333,10 @@ class _ReportBodyState extends State<ReportBody> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder:
-                                                (context) =>
+                                            builder: (context) =>
                                                 //essa  classe é usada para editar uma entrada existente, ele encaminhas
                                                 //os dados do modelo de entrada para o widget AddEditInput, que é responsável
-// por exibir o formulário de edição.
+                                                // por exibir o formulário de edição.
                                                 Edit(inputModel: selectedTransactions[int], categoryIcon: widget.icon),
                                           ),
                                         ).then((value) => Provider.of<InputModelList>(context, listen: false).changeInputModelList());
@@ -328,17 +351,17 @@ class _ReportBodyState extends State<ReportBody> {
                                             onTap: (CompletionHandler handler) async {
                                               Platform.isIOS
                                                   ? iosDialog(context, 'Are you sure you want to delete this transaction?', 'Delete', () async {
-                                                    DB.delete(selectedTransactions[int].id!);
-                                                    await handler(true);
-                                                    Provider.of<InputModelList>(context, listen: false).changeInputModelList();
-                                                    customToast(context, 'Transaction has been deleted');
-                                                  })
+                                                      DB.delete(selectedTransactions[int].id!);
+                                                      await handler(true);
+                                                      Provider.of<InputModelList>(context, listen: false).changeInputModelList();
+                                                      customToast(context, 'Transaction has been deleted');
+                                                    })
                                                   : androidDialog(context, 'Are you sure you want to delete this transaction?', 'Delete', () async {
-                                                    DB.delete(selectedTransactions[int].id!);
-                                                    await handler(true);
-                                                    Provider.of<InputModelList>(context, listen: false).changeInputModelList();
-                                                    customToast(context, 'Transaction has been deleted');
-                                                  });
+                                                      DB.delete(selectedTransactions[int].id!);
+                                                      await handler(true);
+                                                      Provider.of<InputModelList>(context, listen: false).changeInputModelList();
+                                                      customToast(context, 'Transaction has been deleted');
+                                                    });
                                             },
                                             color: red,
                                           ),

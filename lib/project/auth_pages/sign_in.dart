@@ -1,9 +1,9 @@
+import 'package:controle_financeiro/project/auth_services/firebase_authentication.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_login/flutter_login.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:money_assistant_2608/project/auth_services/firebase_authentication.dart';
 
 import '../home.dart';
 
@@ -90,20 +90,43 @@ class SignIn extends StatelessWidget {
         errorColor: Colors.deepOrange,
         titleStyle: TextStyle(color: Colors.greenAccent, fontFamily: 'Quicksand', letterSpacing: 4),
         bodyStyle: TextStyle(fontStyle: FontStyle.italic, decoration: TextDecoration.underline),
-        textFieldStyle: TextStyle(color: Colors.orange, shadows: [Shadow(color: Colors.yellow, blurRadius: 2)]),
+        textFieldStyle: TextStyle(
+          color: Colors.orange,
+          shadows: [Shadow(color: Colors.yellow, blurRadius: 2)],
+        ),
         buttonStyle: TextStyle(fontWeight: FontWeight.w800, color: Colors.yellow),
-        cardTheme: CardTheme(color: Colors.yellow.shade100, elevation: 5, margin: EdgeInsets.only(top: 15), shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(100.0))),
+        cardTheme: CardTheme(
+          color: Colors.yellow.shade100,
+          elevation: 5,
+          margin: EdgeInsets.only(top: 15),
+          shape: ContinuousRectangleBorder(borderRadius: BorderRadius.circular(100.0)),
+        ),
         inputTheme: InputDecorationTheme(
           filled: true,
           fillColor: Colors.purple.withOpacity(.1),
           contentPadding: EdgeInsets.zero,
           errorStyle: TextStyle(backgroundColor: Colors.orange, color: Colors.white),
           labelStyle: TextStyle(fontSize: 12),
-          enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue.shade700, width: 4), borderRadius: inputBorder),
-          focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.blue.shade400, width: 5), borderRadius: inputBorder),
-          errorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red.shade700, width: 7), borderRadius: inputBorder),
-          focusedErrorBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.red.shade400, width: 8), borderRadius: inputBorder),
-          disabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Colors.grey, width: 5), borderRadius: inputBorder),
+          enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue.shade700, width: 4),
+            borderRadius: inputBorder,
+          ),
+          focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.blue.shade400, width: 5),
+            borderRadius: inputBorder,
+          ),
+          errorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red.shade700, width: 7),
+            borderRadius: inputBorder,
+          ),
+          focusedErrorBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.red.shade400, width: 8),
+            borderRadius: inputBorder,
+          ),
+          disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.grey, width: 5),
+            borderRadius: inputBorder,
+          ),
         ),
         buttonTheme: LoginButtonTheme(
           splashColor: Colors.purple,
